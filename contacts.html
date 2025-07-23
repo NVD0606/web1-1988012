@@ -144,7 +144,12 @@
         <p class="text-black-50">
           <i>Send an email. All fields with an * are required.</i>
         </p>
-        <form action="#" method="post" id="formContact">
+        <form
+          action="#"
+          method="post"
+          id="formContact"
+          onsubmit="onSubmit(event)"
+        >
           <div class="row">
             <div class="col">
               <div class="mb-3">
@@ -207,6 +212,7 @@
               </button>
             </div>
           </div>
+          <div id="responseMessage" class="text-danger text-center"></div>
         </form>
       </div>
     </section>
@@ -337,5 +343,43 @@
     <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js
 "></script>
     <script src="js/map.js"></script>
+
+    <!-- Setting recaptcha -->
+
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lf814wrAAAAAA0KAa_GHi4JYGXs0l2podORiK8k"></script>
+    <script>
+      // Function to handle form submission
+      function onSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission
+        grecaptcha.enterprise.ready(async () => {
+          const token = await grecaptcha.enterprise.execute(
+            "6Lf814wrAAAAAA0KAa_GHi4JYGXs0l2podORiK8k",
+            { action: "submit" }
+          );
+          // TTBHanh code
+          let response = await fetch("verify.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ "g-token": token }),
+          });
+          if (response.status === 200) {
+            sendMail();
+          } else {
+            // alert("Error: " + response.statusText);
+            document.getElementById("responseMessage").innerHTML =
+              "Error: Can not verify RECAPTCHA" + response.statusText;
+          }
+        });
+      }
+
+      // Function sendMail
+      function sendMail() {
+        document.getElementById("responseMessage").innerHTML =
+          "Sending email... OK";
+      }
+    </script>
   </body>
 </html>
