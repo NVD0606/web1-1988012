@@ -1,8 +1,9 @@
 <?php
+$secret = getenv('RECAPTCHA_SECRET_KEY');
 $_POST = json_decode(file_get_contents('php://input'), true);
 
 if (isset($_POST) && isset($_POST['g-token'])) {
-    $secretKey = '6Lf814wrAAAAAEgCQcZkOf2A3xyUdfwvv7gxnKWC';
+    $secretKey = 'RECAPTCHA_SECRET_KEY';
     $token = $_POST['g-token'];
     $ip = $_SERVER['REMOTE_ADDR'];
 
