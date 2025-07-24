@@ -201,18 +201,24 @@
               rows="3"
             ></textarea>
           </div>
-          <div class="text-end">
-            <div class="form-check">
-              <label class="form-check-label" for="copy">
-                Send copy to yourself&nbsp;
-              </label>
-              <input type="checkbox" value="" id="copy" /> &nbsp;&nbsp;
-              <button class="btn btn-primary" type="submit">
-                Send Email to us
-              </button>
+          <div class="row">
+            <div class="col">
+              <div id="responseMessage" class="text-danger"></div>
+            </div>
+            <div class="col">
+              <div class="text-end">
+                <div class="form-check">
+                  <label class="form-check-label" for="copy">
+                    Send copy to yourself&nbsp;
+                  </label>
+                  <input type="checkbox" value="" id="copy" /> &nbsp;&nbsp;
+                  <button class="btn btn-primary" type="submit">
+                    Send Email to us
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-          <div id="responseMessage" class="text-danger text-center"></div>
         </form>
       </div>
     </section>
@@ -368,16 +374,21 @@
             sendMail();
           } else {
             // alert("Error: " + response.statusText);
-            document.getElementById("responseMessage").innerHTML =
-              "Error: Can not verify RECAPTCHA" + response.statusText;
+            let responseMessage = document.getElementById("responseMessage");
+            responseMessage.innerHTML = "Error: " + response.statusText;
+            responseMessage.classList.remove();
+            responseMessage.classList.toggle("text-danger");
           }
         });
       }
 
       // Function sendMail
       function sendMail() {
-        document.getElementById("responseMessage").innerHTML =
-          "Sending email... OK";
+        let responseMessage = document.getElementById("responseMessage");
+        responseMessage.innerHTML =
+          "OK. Your email has been sent successfully.";
+        responseMessage.classList.remove();
+        responseMessage.classList.toggle("text-success");
       }
     </script>
   </body>
