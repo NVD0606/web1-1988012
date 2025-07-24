@@ -376,8 +376,8 @@
             // alert("Error: " + response.statusText);
             let responseMessage = document.getElementById("responseMessage");
             responseMessage.innerHTML = "Error: " + response.statusText;
-            responseMessage.classList.remove();
-            responseMessage.classList.toggle("text-danger");
+            responseMessage.classList.remove("text-success");
+            responseMessage.classList.add("text-danger");
           }
         });
       }
@@ -387,8 +387,8 @@
         let responseMessage = document.getElementById("responseMessage");
         responseMessage.innerHTML =
           "OK. Your email has been sent successfully.";
-        responseMessage.classList.remove();
-        responseMessage.classList.toggle("text-success");
+        responseMessage.classList.remove("text-danger");
+        responseMessage.classList.add("text-success");
       }
     </script>
   </body>
