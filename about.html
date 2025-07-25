@@ -78,11 +78,15 @@
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link"
+                  class="nav-link linkLogin"
                   href="#"
                   data-bs-toggle="modal"
                   data-bs-target="#modalLogin"
+                  style="display: none"
                   >Login</a
+                >
+                <a class="nav-link linkLogout" href="#" onclick="logout()"
+                  >Logout</a
                 >
               </li>
             </ul>
@@ -139,12 +143,14 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link linkLogin"
             href="#"
             data-bs-toggle="modal"
             data-bs-target="#modalLogin"
+            style="display: none"
             >Login</a
           >
+          <a class="nav-link linkLogout" href="#" onclick="logout()">Logout</a>
         </li>
       </ul>
       <p class="text-white-50">Copyright &copy; 2025 by 1988012</p>
@@ -185,7 +191,12 @@
             ></button>
           </div>
           <div class="modal-body">
-            <form action="#" method="post" id="formLogin">
+            <form
+              action="#"
+              method="post"
+              id="formLogin"
+              onsubmit="login(event)"
+            >
               <h3 class="text-center">Login Form</h3>
               <div class="mb-3">
                 <input
@@ -194,6 +205,7 @@
                   id="username"
                   placeholder="Username"
                   class="form-control"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -203,12 +215,13 @@
                   id="password"
                   placeholder="Password"
                   class="form-control"
+                  required
                 />
               </div>
               <button type="submit" class="form-control btn">Login</button>
             </form>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer justify-content-center">
             <!-- <button
               type="button"
               class="btn btn-secondary"
@@ -217,6 +230,7 @@
               Close
             </button>
             <button type="button" class="btn btn-primary">Save</button> -->
+            <div class="text-danger" id="errorMessage"></div>
           </div>
         </div>
       </div>
@@ -360,6 +374,9 @@
     </script>
 
     <script>
+      // Check if user is logged in
+      checkLogin();
+
       loadData("aboutus", "about-us-template", "about-us");
       loadData("visions", "visions-template", "visions");
       loadData("testimonials", "testimonials-template", "testimonials");
