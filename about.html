@@ -93,11 +93,16 @@
             <form
               class="d-flex my-2 my-lg-0 border rounded-pill"
               id="formSearch"
+              method="get"
+              action="search.html"
             >
               <input
                 class="form-control ms-3 border-0"
                 type="text"
                 placeholder="Search"
+                required
+                name="keyword"
+                id="keyword"
               />
               <button class="btn my-2 my-sm-0 border-0" type="submit">
                 <i class="fa-solid fa-magnifying-glass"></i>
