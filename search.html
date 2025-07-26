@@ -280,7 +280,11 @@
       {{#each data}}
         <h1>a{{name}}</h1>
         {{#if imagepath}}
-          <img src="{{imagepath}}" alt="{{name}}" class="float-start me-3" />
+          <img
+            src="{{imagepath}}"
+            alt="{{name}}"
+            class="float-start me-3 rounded-4"
+          />
         {{/if}}
         <div class="text-black-50">{{{description}}}</div>
 

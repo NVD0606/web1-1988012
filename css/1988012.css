@@ -109,7 +109,7 @@ h1 {
 #aboutus {
     background-color: var(--web1-pink);
 }
-#about-us div h4 {
+#about-us div h4, #content div h4 {
     color: black;
 }
 /* Sign-up */
