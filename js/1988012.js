@@ -66,6 +66,12 @@ function displayControls(isLogin = true) {
   let linkLogins = document.getElementsByClassName('linkLogin');
   let linkLogouts = document.getElementsByClassName('linkLogout');
 
+  // Show or hide the comment section based on login status
+  let leaveComment = document.getElementById('leave-comment');
+  if (leaveComment) {
+    leaveComment.style.display = isLogin ? 'block' : 'none';
+  }
+
   let displayLogin = isLogin ? 'none' : 'block';
   let displayLogout = isLogin ? 'block' : 'none';
 
@@ -79,13 +85,13 @@ function displayControls(isLogin = true) {
 async function checkLogin() {  
   let isLogin = await verifyToken();
   displayControls(isLogin);
-  console.log(isLogin);
+  console.log(`User is ${isLogin ? 'logged in' : 'not logged in'}`);
 }
 
 // Function to verify the token
 async function verifyToken() {
   const token = localStorage.getItem('token');
-  console.log(token);
+  console.log(`Verifying token: ${token}`);
   if (token) {
     let response = await fetch(`${AUTHENTICATE_API}/verify`, {
             method: "POST",

@@ -438,9 +438,15 @@
           />
           <div class="text-black-50">{{{description}}}</div>
         </div>
-        <div class="py-3">
+        <div class="py-3" id="leave-comment">
           <h3>Leave your comments</h3>
-          <form action="#" method="post" class="text-black-50">
+          <form
+            action="#"
+            method="post"
+            class="text-black-50"
+            onsubmit="addComment(event)"
+          >
+            <input type="hidden" name="blogId" value="{{id}}" id="blogId" />
             <div class="row">
               <div class="col-4">
                 <div class="mb-3">
@@ -502,6 +508,9 @@
                 <button type="submit" class="btn btn-link py-0 my-0">Submit
                   Comment</button>
               </div>
+            </div>
+            <div class="text-center">
+              <div class="text-success" id="responseMessage"></div>
             </div>
           </form>
         </div>
@@ -569,8 +578,66 @@
       // Define function displaying blog details
       async function loadBlogDetails(id, gotoComments = false) {
         await loadData(`blogs/${id}`, "details-template", "blogs");
+        checkLogin();
         if (gotoComments) {
           window.location.href = "#comments";
+        }
+      }
+
+      // Define function to add comment
+      async function addComment(event) {
+        event.preventDefault(); // Prevent form submission
+
+        const token = localStorage.getItem("token");
+        let responseMessage = document.getElementById("responseMessage");
+        responseMessage.innerHTML = ""; // Clear previous messages
+
+        // Get form data
+        const form = event.target;
+        const name = form.name.value.trim();
+        const blogId = form.blogId.value;
+        const email = form.email.value.trim();
+        const message = form.message.value.trim();
+        const agree = form.agree.checked;
+
+        // Prepare comment data
+        const postData = {
+          name: name,
+          email: email,
+          comment: message,
+          blogId: blogId,
+          agree: agree,
+          // date: new Date().toISOString(),
+        };
+
+        // Send comment to API
+        try {
+          const response = await fetch(`${AUTHENTICATE_API}/comment`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(postData),
+          });
+
+          if (response.ok) {
+            responseMessage.innerHTML =
+              response.message || "Comment added successfully!";
+            responseMessage.classList.add("text-success");
+            console.log("Comment added successfully!");
+            form.reset(); // Reset the form fields
+            loadBlogDetails(blogId, true); // Reload details with new comment
+          } else {
+            throw new Error(
+              `Error: ${response.status} - ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          responseMessage.innerHTML = `Failed to add comment: ${error.message}`;
+          responseMessage.classList.add("text-danger");
+          console.error("Failed to add comment:", error);
         }
       }
     </script>
