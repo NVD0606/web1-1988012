@@ -282,12 +282,16 @@
           <!-- <h3>{{name}}</h3>   -->
           <div class="text-black-50">
             {{{summary}}}
-          </div>
-          <a
+
+            <!-- <a
             href="#"
             class="btn btn-link readmore ps-0"
             onclick="loadData('aboutus/{{id}}','details-template','content')"
-          >Read more</a>
+          >Read more</a> -->
+            <a
+              href="?request=aboutus/{{id}}"
+              class="btn btn-link readmore ps-0"
+            >Read more</a></div>
         </div>
       {{/each}}
     </script>
@@ -313,11 +317,22 @@
       <h1>Our Vision</h1>
       {{#each data}}
         <div class="clearfix mb-3">
-          <a
+          <!-- <a
             class="text-decoration-none"
             href="#"
             onclick="loadData('visions/{{id}}','details-template', 'content')"
           >
+            <img
+              class="float-start me-3 rounded-4"
+              src="{{thumbpath}}"
+              alt=""
+            />
+            <h3 class="text-black">{{name}}</h3>
+            <p class="text-black-50">
+              {{summary}}
+            </p>
+          </a> -->
+          <a class="text-decoration-none" href="?request=visions/{{id}}">
             <img
               class="float-start me-3 rounded-4"
               src="{{thumbpath}}"
@@ -357,11 +372,22 @@
         <div class="row py-3">
           {{#each data}}
             <div class="col">
-              <a
+              <!-- <a
                 href="#"
                 class="text-decoration-none"
                 onclick="loadData('team/{{id}}', 'details-template', 'content')"
               >
+                <img
+                  class="rouded-4 mb-3 img-fluid"
+                  src="{{thumbpath}}"
+                  alt=""
+                />
+                <h4 class="text-black">{{name}}</h4>
+                <p class="text-black-50">
+                  {{summary}}
+                </p>
+              </a> -->
+              <a href="?request=team/{{id}}" class="text-decoration-none">
                 <img
                   class="rouded-4 mb-3 img-fluid"
                   src="{{thumbpath}}"
@@ -379,13 +405,20 @@
     </script>
 
     <script>
-      // Check if user is logged in
-      checkLogin();
+      let searchParams = new URLSearchParams(window.location.search);
+      let request = searchParams.get("request");
+      if (request) {
+        // Load product or news details
+        loadData(request, "details-template", "content");
+      } else {
+        // Check if user is logged in
+        checkLogin();
 
-      loadData("aboutus", "about-us-template", "about-us");
-      loadData("visions", "visions-template", "visions");
-      loadData("testimonials", "testimonials-template", "testimonials");
-      loadData("team", "team-template", "our-team");
+        loadData("aboutus", "about-us-template", "about-us");
+        loadData("visions", "visions-template", "visions");
+        loadData("testimonials", "testimonials-template", "testimonials");
+        loadData("team", "team-template", "our-team");
+      }
     </script>
   </body>
 </html>

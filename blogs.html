@@ -116,84 +116,7 @@
     <section id="banner-small"></section>
     <section class="container py-5">
       <div class="row">
-        <div class="col-8" id="blogs">
-          <h1>Blogs</h1>
-          <div class="clearfix py-3">
-            <h3>Lorem ipsum dolor sit amet.</h3>
-            <p class="text-black-50">
-              by Super Useer in <a href="#">Category</a> on date.
-              <a href="#">Comments (3)</a>
-            </p>
-            <img
-              class="float-start me-3 border rounded-4"
-              src="images/blog/blog-thumb1.jpg"
-              alt=""
-            />
-            <p class="text-black-50">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora
-              ad eligendi nobis unde eos sequi odio amet illum. Quae, a quia
-              voluptate nisi optio nemo amet minus veniam sed cupiditate?
-            </p>
-            <a href="#" class="btn btn-link readmore">Read more</a>
-          </div>
-          <div class="clearfix py-3">
-            <h3>Lorem ipsum dolor sit amet.</h3>
-            <p class="text-black-50">
-              by Super Useer in <a href="#">Category</a> on date.
-              <a href="#">Comments (3)</a>
-            </p>
-            <img
-              class="float-start me-3 border rounded-4"
-              src="images/blog/blog-thumb2.jpg"
-              alt=""
-            />
-            <p class="text-black-50">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora
-              ad eligendi nobis unde eos sequi odio amet illum. Quae, a quia
-              voluptate nisi optio nemo amet minus veniam sed cupiditate?
-            </p>
-            <a href="#" class="btn btn-link readmore">Read more</a>
-          </div>
-          <div class="clearfix py-3">
-            <h3>Lorem ipsum dolor sit amet.</h3>
-            <p class="text-black-50">
-              by Super Useer in <a href="#">Category</a> on date.
-              <a href="#">Comments (3)</a>
-            </p>
-            <img
-              class="float-start me-3 border rounded-4"
-              src="images/blog/blog-thumb3.jpg"
-              alt=""
-            />
-            <p class="text-black-50">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora
-              ad eligendi nobis unde eos sequi odio amet illum. Quae, a quia
-              voluptate nisi optio nemo amet minus veniam sed cupiditate?
-            </p>
-            <a href="#" class="btn btn-link readmore">Read more</a>
-          </div>
-          <nav aria-label="Page navigation">
-            <ul class="pagination">
-              <!-- <li class="page-item disabled">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li> -->
-              <li class="page-item disabled" aria-current="page">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">3</a>
-              </li>
-              <!-- <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li> -->
-            </ul>
-          </nav>
-        </div>
+        <div class="col-8" id="blogs"></div>
         <div class="col-4" id="blogs-categories"></div>
       </div>
     </section>
@@ -352,10 +275,15 @@
       <ul class="py-3">
         {{#each data}}
           <li>
-            <a
+            <!-- <a
               class="text-black-50 text-decoration-none"
               href="#"
               onclick="loadDataBlogs('blogs/categories/{{id}}')"
+            >{{name}}
+            </a> -->
+            <a
+              class="text-black-50 text-decoration-none"
+              href="?request=blogs/categories/{{id}}"
             >{{name}}
             </a>
           </li>
@@ -373,14 +301,19 @@
             by
             {{author}}
             in
-            <a
+            <!-- <a
               href="#"
               onclick="loadDataBlogs('blogs/categories/{{category.id}}')"
+            >{{category.name}}</a> -->
+            <a
+              href="?request=blogs/categories/{{category.id}}"
             >{{category.name}}</a>
             on
             {{formatDate date}}.
-            <a href="#"
-            onclick="loadBlogDetails('{{id}}', true)">Comments ({{comments.length}})</a>
+            <!-- <a href="#"
+            onclick="loadBlogDetails('{{id}}', true)">Comments ({{comments.length}})</a> -->
+            <a href="?request=blogs/{{id}}&gotoComments=true"
+            >Comments ({{comments.length}})</a>
           </p>
           <img
             class="float-start me-3 border rounded-4"
@@ -390,8 +323,10 @@
           <p class="text-black-50">
             {{summary}}
           </p>
-          <a href="#" class="btn btn-link readmore"
+          <!-- <a href="#" class="btn btn-link readmore"
           onclick="loadBlogDetails('{{id}}')"
+          >Read more</a> -->
+          <a href="?request=blogs/{{id}}" class="btn btn-link readmore"
           >Read more</a>
         </div>
       {{/each}}
@@ -537,17 +472,37 @@
 
     <!--  -->
     <script>
-      // Check if user is logged in
       checkLogin();
+      let searchParams = new URLSearchParams(window.location.search);
+      let request = searchParams.get("request");
+      let gotoComments = searchParams.get("gotoComments");
+      // console.log(request);
 
-      loadData(
-        "blogs-categories",
-        "blogs-categories-template",
-        "blogs-categories"
-      );
+      if (request) {
+        if (request.includes("blogs/categories")) {
+          loadData(
+            "blogs-categories",
+            "blogs-categories-template",
+            "blogs-categories"
+          );
+          loadDataBlogs(request);
+        } else {
+          const id = request.split("/")[1]; // "35"
+          // console.log(id);
+          checkLogin();
+          loadBlogDetails(id, gotoComments === "true");
+        }
+      } else {
+        // Check if user is logged in
+        checkLogin();
+        loadData(
+          "blogs-categories",
+          "blogs-categories-template",
+          "blogs-categories"
+        );
 
-      loadDataBlogs("blogs", 1);
-
+        loadDataBlogs("blogs", 1);
+      }
       // Define load data function for blogs
       async function loadDataBlogs(request, currentPage = 1) {
         const response = await fetch(`${API}/${request}?page=${currentPage}`);

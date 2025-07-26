@@ -412,10 +412,14 @@
             />
             <h3>{{name}}</h3>
             <p class="text-black-50">{{summary}}</p>
-            <a
+            <!-- <a
               href="#"
               class="readmore btn btn-link pt-0"
               onclick="loadData('products/{{id}}', 'details-template', 'content')"
+            >Read More</a> -->
+            <a
+              href="?request=products/{{id}}"
+              class="readmore btn btn-link pt-0"
             >Read More</a>
           </div>
         {{/each}}
@@ -434,11 +438,13 @@
                   {{date}}
                 </h3>
               </div>
-              <a
+              <!-- <a
                 href="#"
                 class="btn btn-link readmore"
                 onclick="loadData('news/{{id}}','details-template','content')"
-              >Read more</a>
+              >Read more</a> -->
+              <a href="?request=news/{{id}}" class="btn btn-link readmore">Read
+                more</a>
             </div>
             <div>
               <h3>{{name}}</h3>
@@ -489,15 +495,21 @@
 
     <!-- Script call loadData -->
     <script>
-      // Check if user is logged in
-      checkLogin();
+      let searchParams = new URLSearchParams(window.location.search);
+      let request = searchParams.get("request");
+      if (request) {
+        // Load product or news details
+        loadData(request, "details-template", "content");
+      } else {
+        // Check if user is logged in
+        checkLogin();
 
-      // Load products
-      loadData("products", "products-template", "products");
+        // Load products
+        loadData("products", "products-template", "products");
 
-      // Load news
-      loadData("news", "news-template", "news");
-
+        // Load news
+        loadData("news", "news-template", "news");
+      }
       // Function set active/unactive for image in products
       function setActiveImagepath(img, imagepath, isActive = true) {
         if (isActive) {
